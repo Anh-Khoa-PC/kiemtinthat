@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full bg-gray-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Về Chúng Tôi - Kiểm Tin Thật</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+</head>
+<body class="h-full flex flex-col bg-gray-100 font-sans antialiased">
+    <header class="bg-white shadow-xl py-5 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-6 lg:px-8">
+            <a href="#home" class="text-3xl font-extrabold text-blue-700 tracking-tight">Kiểm Tin Thật</a>
+            <div class=" md:flex space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Trang chủ</a>
+                <a href="check-news.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Kiểm tra tin giả</a>
+                <a href="reports.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Báo Cáo</a>
+                <a href="about-us.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Về chúng tôi</a>
+                <a href="contribute.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Đóng góp / Ủng hộ</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition duration-200">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white mt-3 py-3 shadow-lg rounded-xl mx-4">
+            <a href="index.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Trang chủ</a>
+            <a href="check-news.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Kiểm tra tin giả</a>
+            <a href="chatbot-ai.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Chatbot AI</a>
+            <a href="about-us.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Về chúng tôi</a>
+            <a href="contribute.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Đóng góp / Ủng hộ</a>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4 md:p-8">
+        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl w-full max-w-4xl mx-auto my-8">
+            <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-8 drop-shadow-sm">Về chúng tôi</h2>
+            <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+                Chào bạn! Kiểm Tin Thật được phát triển bởi Nguyễn Võ Anh Khoa, Tại Kiểm Tin Thật, chúng tôi cam kết chống lại sự lan truyền của tin giả và thông tin sai lệch, góp phần xây dựng một không gian mạng minh bạch và đáng tin cậy. Chúng tôi tin rằng mọi người đều có quyền được tiếp cận thông tin chính xác để đưa ra quyết định sáng suốt.
+            </p>
+            <p class="text-gray-700 text-lg mb-10 leading-relaxed">
+                Đội ngũ của chúng tôi tập hợp các chuyên gia hàng đầu về Trí tuệ Nhân tạo, Khoa học Dữ liệu và Phát triển Web. Với niềm đam mê chung, chúng tôi không ngừng nỗ lực tạo ra những công cụ tiên tiến, giúp cộng đồng dễ dàng phân biệt sự thật và giả dối trong kỷ nguyên số.
+            </p>
+
+            <div class="mb-10">
+                <h3 class="text-3xl font-bold text-gray-800 mb-5">Sứ mệnh</h3>
+                <p class="text-gray-700 text-lg leading-relaxed">
+                    Cung cấp một công cụ mạnh mẽ, dễ sử dụng để mọi người có thể tự mình kiểm tra và đánh giá độ tin cậy của thông tin, góp phần xây dựng một cộng đồng trực tuyến minh bạch và an toàn hơn.
+                </p>
+            </div>
+
+            <div class="mb-10">
+                <h3 class="text-3xl font-bold text-gray-800 mb-5">Tầm nhìn</h3>
+                <p class="text-gray-700 text-lg leading-relaxed">
+                    Trở thành nền tảng hàng đầu tại Việt Nam trong lĩnh vực phát hiện tin giả, được tin cậy bởi hàng triệu người dùng và góp phần tạo ra một môi trường thông tin lành mạnh.
+                </p>
+            </div>
+
+            <div class="pt-8 border-t-2 border-gray-200">
+                <h3 class="text-3xl font-bold text-gray-800 mb-5">Liên hệ</h3>
+                <p class="text-gray-700 text-lg mb-3">Email: <a href="mailto:contact@kiemtinthat.com" class="text-blue-600 hover:underline">contact@kiemtinthat.com</a></p>
+                <p class="text-gray-700 text-lg mb-6">Điện thoại: <span class="text-blue-700 font-semibold">+84 987 654 321</span></p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-blue-600 hover:text-blue-800 transition duration-300 text-2xl"><i class="fab fa-facebook-f"></i> Facebook</a>
+                    <a href="#" class="text-blue-600 hover:text-blue-800 transition duration-300 text-2xl"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#" class="text-blue-600 hover:text-blue-800 transition duration-300 text-2xl"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-10 mt-auto">
+        <div class="container mx-auto text-center px-4">
+            <p class="text-lg mb-4">&copy; 2025 Kiểm Tin Thật. Phát triển bởi Nguyễn Võ Anh Khoa</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="https://www.facebook.com/anhkhoavnk/?locale=vi_VN" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-400 transition duration-300 text-xl"><i class="fab fa-facebook-f"></i> Facebook</a>
+                
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module" src="js/scripts.js"></script>
+</body>
+</html>

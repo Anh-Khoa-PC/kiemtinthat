@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm Tin Thật - Kiểm Tin Tức (AI Nâng Cấp)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Nền màu trắng */
+        }
+
+        /* Utility Classes (if not fully covered by Tailwind or for custom behaviors) */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            cursor: pointer;
+            display: inline-flex; /* Sử dụng flex để căn chỉnh biểu tượng */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Khoảng cách giữa chữ và biểu tượng */
+        }
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+        .btn-primary {
+            background-color: #1d4ed8; /* Xanh dương đậm */
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #1e40af; /* Xanh dương đậm hơn */
+        }
+        .btn-secondary {
+            background-color: #e5e7eb; /* Xám nhạt */
+            color: #374151; /* Xám đậm */
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #d1d5db; /* Xám trung bình */
+        }
+
+        /* Form Elements */
+        .input-field, .textarea-field {
+            border-radius: 8px;
+            border: 1px solid #d1d5db; /* Xám trung bình */
+            padding: 0.75rem 1rem;
+            width: 100%;
+            box-sizing: border-box; /* Đảm bảo padding không làm tăng chiều rộng */
+        }
+        .input-field:focus, .textarea-field:focus {
+            outline: none;
+            border-color: #1d4ed8; /* Xanh dương đậm */
+            box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.3); /* Xanh dương đậm với độ mờ */
+        }
+        .textarea-field {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* History Items */
+        .history-item {
+            border: 1px solid #e5e7eb; /* Xám nhạt */
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            background-color: #f9fafb; /* Xám rất nhạt */
+        }
+
+        /* Score Badges */
+        .score-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600; /* font-semibold */
+            display: inline-block;
+        }
+        .score-real { background-color: #dcfce7; color: #166534; } /* Xanh lá cây nhạt / Xanh lá cây đậm */
+        .score-fake { background-color: #fee2e2; color: #991b1b; } /* Đỏ nhạt / Đỏ đậm */
+        .score-mid { background-color: #fef3c7; color: #92400e; } /* Vàng nhạt / Vàng đậm */
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* Nền mờ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            transform: translateY(-20px); /* Trạng thái ban đầu cho animation */
+            transition: transform 0.3s ease;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        /* Loader */
+        .loader {
+            border: 4px solid #f3f3f3; /* Xám nhạt */
+            border-top: 4px solid #1d4ed8; /* Xanh dương đậm */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Tabs */
+        .tabs button {
+            padding: 0.5rem 1rem;
+            border-radius: 6px 6px 0 0;
+            background-color: #e5e7eb; /* Xám nhạt */
+            color: #374151; /* Xám đậm */
+            font-weight: 500;
+            border: 1px solid #d1d5db; /* Xám trung bình */
+            border-bottom: none;
+            margin-right: -1px; /* Trùng biên để liền mạch */
+        }
+        .tabs button.active {
+            background-color: white;
+            color: #1d4ed8; /* Xanh dương đậm */
+            border-bottom: 1px solid white; /* Ẩn biên dưới của tab đang hoạt động */
+            position: relative;
+            z-index: 1;
+        }
+        .tab-content {
+            border: 1px solid #d1d5db; /* Xám trung bình */
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 8px;
+            margin-top: -1px; /* Trùng biên với tab */
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="bg-white flex flex-col min-h-screen">
+    <header class=" py-5 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-6 lg:px-8">
+            <a href="index.html" class="text-3xl font-extrabold text-blue-700 tracking-tight" aria-label="Trang chủ Kiểm Tin Thật">Kiểm Tin Thật</a>
+            <div class=" md:flex space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Trang chủ</a>
+                <a href="check-news.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Kiểm tra tin giả</a>
+                <a href="reports.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Báo Cáo</a>
+                <a href="about-us.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Về chúng tôi</a>
+                <a href="contribute.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Đóng góp / Ủng hộ</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition duration-200" aria-label="Mở menu di động">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white mt-3 py-3 shadow-lg rounded-xl mx-4">
+            <a href="index.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Trang chủ</a>
+            <a href="check-news.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Kiểm tra tin giả</a>
+            <a href="reports.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Báo Cáo</a>
+            <a href="about-us.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Về chúng tôi</a>
+            <a href="contribute.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Đóng góp / Ủng hộ</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <div class="container">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-blue-700">Kiểm Tin Thật</h1>
+                <p class="text-lg text-gray-600 mt-2">Công cụ kiểm tra tính xác thực của tin tức với AI</p>
+            </header>
+
+            <section id="inputMethodSection" class="mb-8">
+                <div role="tablist" class="tabs flex border-b border-gray-300">
+                    <button role="tab" id="tabUrl" class="btn-tab active" data-tab="urlInputTab" aria-selected="true" aria-controls="urlInputTab">Kiểm tra Link</button>
+                    <button role="tab" id="tabText" class="btn-tab" data-tab="textInputTab" aria-selected="false" aria-controls="textInputTab">Kiểm tra Văn bản</button>
+                </div>
+
+                <div id="urlInputTab" role="tabpanel" aria-labelledby="tabUrl" class="tab-content">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Nhập link bài viết</h2>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input type="url" id="urlInput" class="input-field flex-grow" placeholder="https://example.com/news-article" aria-label="Nhập URL bài viết">
+                    </div>
+                    <div id="urlInputError" class="text-red-500 text-sm mt-2" aria-live="polite"></div>
+                </div>
+
+                <div id="textInputTab" role="tabpanel" aria-labelledby="tabText" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold mb-3 text-gray-700">Nhập nội dung văn bản</h2>
+                    <textarea id="textInput" class="textarea-field" placeholder="Dán nội dung tin tức vào đây..." aria-label="Nhập nội dung văn bản"></textarea>
+                    <div id="textInputError" class="text-red-500 text-sm mt-2" aria-live="polite"></div>
+                </div>
+                <button id="submitBtn" class="btn btn-primary w-full mt-4" aria-label="Kiểm tra tin tức">
+                    <i class="fas fa-search"></i> Kiểm Tra Tin
+                </button>
+            </section>
+
+            <div id="loadingIndicator" class="text-center my-6 hidden" aria-live="assertive" aria-atomic="true">
+                <div class="loader" role="status" aria-label="Đang tải"></div>
+                <p class="text-gray-600">Đang phân tích bằng AI, vui lòng đợi...</p>
+            </div>
+
+            <section id="resultSection" class="mb-8 p-6 bg-white rounded-lg shadow-md hidden" aria-live="polite">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kết Quả Phân Tích</h2>
+                <div id="analysisResult" class="mb-4 space-y-2">
+                    <p><strong>Nguồn kiểm tra:</strong> <span id="inputTypeDisplay" class="font-medium"></span></p>
+                    <p><strong>Nội dung:</strong> <span id="resultInput" class="text-blue-600 break-all"></span></p>
+                    <p><strong>Điểm Tin Cậy (AI):</strong> <span id="truthScore" class="score-badge"></span></p>
+                    <div id="recommendation" class="mt-4 p-3 border border-gray-200 rounded-lg hidden" role="alert"></div>
+                    <div class="mt-3">
+                        <h4 class="font-semibold text-gray-700">Giải Thích Chi Tiết (từ AI):</h4>
+                        <ul id="explanationList" class="list-disc list-inside text-gray-700 text-sm space-y-1 mt-1">
+                            <li class="text-gray-500">Thông tin chi tiết sẽ hiển thị ở đây sau khi phân tích.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="votingSection" class="mt-6 border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-medium mb-3 text-gray-700">Bạn nghĩ sao về kết quả này?</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <button data-vote="real" class="btn btn-secondary vote-btn" aria-label="Bình chọn tin thật"><i class="far fa-thumbs-up"></i> Tin Thật</button>
+                        <button data-vote="fake" class="btn btn-secondary vote-btn" aria-label="Bình chọn tin giả"><i class="far fa-thumbs-down"></i> Tin Giả</button>
+                        <button data-vote="unsure" class="btn btn-secondary vote-btn" aria-label="Bình chọn không chắc"><i class="far fa-question-circle"></i> Không Chắc</button>
+                    </div>
+                    <p id="voteMessage" class="text-sm text-green-600 mt-2" aria-live="polite"></p>
+                </div>
+            </section>
+
+            <section id="historySection" class="p-6 bg-white rounded-lg shadow-md mt-8">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-800">Lịch Sử Kiểm Tra</h2>
+                <div id="historyList" class="space-y-3">
+                    <p id="noHistoryMessage" class="text-gray-500">Chưa có mục nào được kiểm tra.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="messageModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalMessageText">
+        <div class="modal-content">
+            <p id="modalMessageText" class="text-lg mb-4 text-gray-800"></p>
+            <button id="modalCloseBtn" class="btn btn-primary">Đóng</button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-8 mt-auto">
+        <div class="bg-gray-900 container mx-auto text-center px-10">
+            <p class="text-md mb-5">&copy; 2025 Kiểm Tin Thật. Phát triển bởi Nguyễn Võ Anh Khoa đẹp trai.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="https://www.facebook.com/anhkhoavnk/?locale=vi_VN" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-400 transition duration-300 text-xl" aria-label="Facebook cá nhân của Nguyễn Võ Anh Khoa"><i class="fab fa-facebook-f"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        // --- Hằng số & Các phần tử DOM ---
+        const LOCAL_STORAGE_KEY = 'kiemTinThatHistory'; // Khóa lưu trữ lịch sử trong Local Storage
+        let currentCheckedItem = null; // Mục đang được kiểm tra hiện tại
+        let currentInputType = 'url'; // Loại đầu vào hiện tại: 'url' hoặc 'text'
+        let debounceTimeout; // Biến cho chức năng debounce
+
+        // URL của dịch vụ Chutes AI (proxy cho DeepSeek hoặc các LLM khác)
+        const CHUTES_AI_API_URL = "https://llm.chutes.ai/v1/chat/completions";
+
+        // API Token của bạn từ dịch vụ Chutes AI.
+        // Bạn cần đăng ký tài khoản tại Chutes AI và lấy token này.
+        // TUYỆT ĐỐI KHÔNG ĐẶT API KEY CỦA DEEPSEEK TRỰC TIẾP VÀO ĐÂY!
+        // Đây là token để xác thực với Chutes AI, không phải key của DeepSeek.
+        // Token này sẽ được Netlify inject vào trong quá trình build.
+        const CHUTES_AI_API_TOKEN = "__CHUTES_AI_API_TOKEN__"; 
+        // Ví dụ: const CHUTES_AI_API_TOKEN = "sk-your-chutes-ai-token-1234567890abcdef";
+
+
+        const DOM = {
+            // Tabs (Các tab chuyển đổi loại đầu vào)
+            tabUrlBtn: document.getElementById('tabUrl'),
+            tabTextBtn: document.getElementById('tabText'),
+            urlInputTab: document.getElementById('urlInputTab'),
+            textInputTab: document.getElementById('textInputTab'),
+
+            // Inputs (Các trường nhập liệu)
+            urlInput: document.getElementById('urlInput'),
+            textInput: document.getElementById('textInput'),
+            submitBtn: document.getElementById('submitBtn'),
+            urlInputError: document.getElementById('urlInputError'),
+            textInputError: document.getElementById('textInputError'),
+
+            // Results & Loading (Kết quả và chỉ báo tải)
+            loadingIndicator: document.getElementById('loadingIndicator'),
+            resultSection: document.getElementById('resultSection'),
+            inputTypeDisplay: document.getElementById('inputTypeDisplay'),
+            resultInput: document.getElementById('resultInput'),
+            truthScore: document.getElementById('truthScore'),
+            explanationList: document.getElementById('explanationList'),
+            recommendationDiv: document.getElementById('recommendation'),
+
+            // Voting (Bình chọn)
+            votingSection: document.getElementById('votingSection'),
+            voteButtons: document.querySelectorAll('.vote-btn'),
+            voteMessage: document.getElementById('voteMessage'),
+
+            // History (Lịch sử)
+            historyList: document.getElementById('historyList'),
+            noHistoryMessage: document.getElementById('noHistoryMessage'),
+
+            // Modal (Hộp thoại thông báo)
+            messageModal: document.getElementById('messageModal'),
+            modalMessageText: document.getElementById('modalMessageText'),
+            modalCloseBtn: document.getElementById('modalCloseBtn'),
+
+            // Mobile Menu (Menu di động)
+            mobileMenuButton: document.getElementById('mobile-menu-button'),
+            mobileMenu: document.getElementById('mobile-menu')
+        };
+
+        // --- Hàm tiện ích ---
+        function showMessageModal(message) {
+            DOM.modalMessageText.textContent = message;
+            DOM.messageModal.classList.add('active');
+            DOM.modalCloseBtn.focus(); // Tập trung vào nút đóng để dễ truy cập
+        }
+
+        function debounce(func, delay) {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(func, delay);
+        }
+
+        function scrollToElement(element) {
+            if (element) {
+                window.scrollTo({ top: element.offsetTop - 20, behavior: 'smooth' });
+            }
+        }
+
+        // --- Logic chuyển đổi tab ---
+        function switchTab(tabType) {
+            currentInputType = tabType;
+
+            DOM.tabUrlBtn.classList.remove('active');
+            DOM.tabUrlBtn.setAttribute('aria-selected', 'false');
+            DOM.textInputTab.classList.add('hidden');
+
+            DOM.tabTextBtn.classList.remove('active');
+            DOM.tabTextBtn.setAttribute('aria-selected', 'false');
+            DOM.urlInputTab.classList.add('hidden');
+
+            // Đặt lại thông báo lỗi
+            DOM.urlInputError.textContent = "";
+            DOM.textInputError.textContent = "";
+
+            if (tabType === 'url') {
+                DOM.tabUrlBtn.classList.add('active');
+                DOM.tabUrlBtn.setAttribute('aria-selected', 'true');
+                DOM.urlInputTab.classList.remove('hidden');
+                DOM.urlInput.focus(); // Tập trung vào trường nhập liệu đang hoạt động
+            } else {
+                DOM.tabTextBtn.classList.add('active');
+                DOM.tabTextBtn.setAttribute('aria-selected', 'true');
+                DOM.textInputTab.classList.remove('hidden');
+                DOM.textInput.focus(); // Tập trung vào trường nhập liệu đang hoạt động
+            }
+        }
+
+        // --- Logic phân tích AI sử dụng Chutes AI API ---
+        async function callChutesAIAnalysis(type, inputValue) {
+            // Prompt để yêu cầu AI phân tích và trả về JSON
+            let promptContent = `Bạn là một chuyên gia kiểm tra tin tức. Hãy phân tích nội dung sau đây (có thể là URL hoặc văn bản) và đánh giá độ tin cậy của nó trên thang điểm từ 0 đến 100, trong đó 0 là hoàn toàn giả mạo và 100 là hoàn toàn đáng tin cậy. Đồng thời, hãy cung cấp một danh sách các lý do chi tiết (tối thiểu 3 lý do) giải thích cho điểm số đó, tập trung vào các yếu tố như nguồn gốc, ngôn ngữ, tính hợp lý, và các dấu hiệu của tin giả/tin thật.
+Nội dung cần phân tích: ${inputValue}
+Định dạng phản hồi JSON:
+\`\`\`json
+{
+  "score": <số nguyên từ 0-100>,
+  "reasons": [
+    "<lý do 1>",
+    "<lý do 2>",
+    "<lý do 3>",
+    ...
+  ]
+}
+\`\`\``;
+
+            // Kiểm tra xem API Token của Chutes AI đã được cung cấp chưa
+            if (!CHUTES_AI_API_TOKEN || CHUTES_AI_API_TOKEN === "__CHUTES_AI_API_TOKEN__") {
+                showMessageModal("Lỗi: API Token của Chutes AI chưa được cung cấp. Vui lòng cấu hình biến môi trường 'CHUTES_AI_API_TOKEN' trên Netlify.");
+                return null;
+            }
+
+            try {
+                const response = await fetch(CHUTES_AI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CHUTES_AI_API_TOKEN}` // Gửi token của Chutes AI
+                    },
+                    body: JSON.stringify({
+                        // Model DeepSeek V3 0324 như trong hình ảnh bạn cung cấp
+                        model: "deepseek-ai/deepseek-v3-0324",
+                        messages: [{ role: "user", content: promptContent }],
+                        stream: false, // Không sử dụng chế độ streaming
+                        max_tokens: 1024 // Giới hạn token đầu ra
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Lỗi API từ Chutes AI:", errorData);
+                    showMessageModal(`Lỗi từ dịch vụ Chutes AI: ${errorData.error?.message || response.statusText}. Vui lòng kiểm tra token và thử lại.`);
+                    return null;
+                }
+
+                const result = await response.json();
+
+                if (result.choices && result.choices.length > 0 &&
+                    result.choices[0].message && result.choices[0].message.content) {
+                    const aiContent = result.choices[0].message.content;
+
+                    // Cố gắng parse nội dung AI thành JSON
+                    try {
+                        const parsedAiResponse = JSON.parse(aiContent);
+
+                        // Xác thực cấu trúc JSON đã parse
+                        if (typeof parsedAiResponse.score === 'number' && Array.isArray(parsedAiResponse.reasons)) {
+                            // Đảm bảo điểm số nằm trong khoảng 0-100
+                            parsedAiResponse.score = Math.max(0, Math.min(100, parsedAiResponse.score));
+                            return { score: parsedAiResponse.score, reasons: parsedAiResponse.reasons };
+                        } else {
+                            console.error("Cấu trúc JSON không hợp lệ từ AI:", parsedAiResponse);
+                            showMessageModal("Phản hồi từ AI không hợp lệ. Vui lòng kiểm tra định dạng phản hồi của AI.");
+                            return null;
+                        }
+                    } catch (parseError) {
+                        console.error("Lỗi khi parse nội dung AI thành JSON:", parseError);
+                        showMessageModal(`Không thể parse phản hồi từ AI thành JSON. Phản hồi thô: ${aiContent.substring(0, 200)}...`);
+                        return null;
+                    }
+                } else {
+                    showMessageModal("Không nhận được phản hồi hợp lệ từ AI qua Chutes AI. Vui lòng thử lại.");
+                    return null;
+                }
+            } catch (error) {
+                console.error("Lỗi khi gọi đến Chutes AI:", error);
+                showMessageModal(`Có lỗi xảy ra trong quá trình kết nối đến dịch vụ Chutes AI: ${error.message}. Vui lòng kiểm tra kết nối và thử lại.`);
+                return null;
+            }
+        }
+
+        // --- Cập nhật giao diện người dùng ---
+        function displayResults(data) {
+            DOM.inputTypeDisplay.textContent = data.inputType === 'url' ? 'Link URL' : 'Văn bản';
+
+            if (data.inputType === 'url') {
+                DOM.resultInput.innerHTML = `<a href="${data.inputValue}" target="_blank" rel="noopener noreferrer" class="hover:underline">${data.inputValue}</a>`;
+            } else {
+                const displayText = data.inputValue.length > 200 ? data.inputValue.substring(0, 200) + "..." : data.inputValue;
+                DOM.resultInput.textContent = displayText;
+            }
+
+            DOM.truthScore.textContent = `${data.analysisScore}%`;
+            DOM.truthScore.className = 'score-badge '; // Đặt lại các lớp CSS
+            if (data.analysisScore >= 70) DOM.truthScore.classList.add('score-real');
+            else if (data.analysisScore <= 30) DOM.truthScore.classList.add('score-fake');
+            else DOM.truthScore.classList.add('score-mid');
+
+            DOM.explanationList.innerHTML = '';
+            if (data.analysisReasons && data.analysisReasons.length > 0) {
+                data.analysisReasons.forEach(reason => {
+                    const li = document.createElement('li');
+                    li.textContent = reason;
+                    DOM.explanationList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = "Không có giải thích chi tiết từ AI.";
+                DOM.explanationList.appendChild(li);
+            }
+
+            DOM.recommendationDiv.className = 'mt-4 p-3 border rounded-lg'; // Đặt lại các lớp CSS
+            DOM.recommendationDiv.innerHTML = '';
+            DOM.recommendationDiv.classList.remove('hidden'); // Đảm bảo hiển thị
+
+            if (data.analysisScore < 50) {
+                DOM.recommendationDiv.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                DOM.recommendationDiv.innerHTML = '<p class="font-bold">⚠️ Khuyến nghị: Độ tin cậy thấp!</p><p>Thông tin này có nhiều dấu hiệu không đáng tin cậy theo phân tích của AI. Bạn không nên chia sẻ nếu chưa kiểm chứng từ các cơ quan nhà nước, báo chí lớn hoặc nguồn tin chính thống, uy tín.</p>';
+            } else if (data.analysisScore < 70) {
+                DOM.recommendationDiv.classList.add('bg-yellow-100', 'border-yellow-400', 'text-yellow-700');
+                DOM.recommendationDiv.innerHTML = '<p class="font-bold">🤔 Khuyến nghị: Cần kiểm chứng!</p><p>Thông tin này có một số yếu tố chưa rõ ràng theo phân tích của AI. Bạn nên kiểm tra thêm từ các nguồn chính thống trước khi chia sẻ.</p>';
+            } else {
+                DOM.recommendationDiv.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+                DOM.recommendationDiv.innerHTML = '<p class="font-bold">✅ Khuyến nghị: Có vẻ đáng tin cậy!</p><p>Thông tin này ít có dấu hiệu không đáng tin cậy theo phân tích của AI. Tuy nhiên, luôn tốt nhất là tham khảo thêm từ các nguồn chính thống khác nếu có thể.</p>';
+            }
+
+            // Đặt lại trạng thái nút bình chọn
+            DOM.voteButtons.forEach(btn => {
+                btn.classList.remove('btn-primary', 'bg-green-500', 'bg-red-500', 'bg-yellow-500');
+                btn.classList.add('btn-secondary');
+                btn.disabled = false;
+            });
+
+            if (data.userVote) {
+                const activeBtn = DOM.votingSection.querySelector(`[data-vote="${data.userVote}"]`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('btn-secondary');
+                    activeBtn.classList.add('btn-primary');
+                    if (data.userVote === 'real') activeBtn.classList.add('bg-green-500');
+                    else if (data.userVote === 'fake') activeBtn.classList.add('bg-red-500');
+                    else if (data.userVote === 'unsure') activeBtn.classList.add('bg-yellow-500');
+                }
+                DOM.voteMessage.textContent = `Bạn đã bình chọn: ${data.userVote === 'real' ? 'Tin Thật' : data.userVote === 'fake' ? 'Tin Giả' : 'Không Chắc'}.`;
+            } else {
+                DOM.voteMessage.textContent = '';
+            }
+
+            DOM.resultSection.classList.remove('hidden');
+            DOM.loadingIndicator.classList.add('hidden');
+
+            currentCheckedItem = data;
+        }
+
+        function renderHistory(items) {
+            DOM.historyList.innerHTML = ''; // Xóa lịch sử hiện có
+            if (items.length === 0) {
+                DOM.noHistoryMessage.classList.remove('hidden');
+                return;
+            }
+            DOM.noHistoryMessage.classList.add('hidden');
+
+            // Sắp xếp theo thời gian gần nhất
+            items.sort((a, b) => b.timestamp - a.timestamp);
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2';
+                div.setAttribute('data-id', item.id); // Thêm data-id để ủy quyền sự kiện
+
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'flex-grow min-w-0';
+
+                const inputValDisplay = document.createElement('p');
+                inputValDisplay.className = 'text-blue-600 hover:underline break-all font-medium truncate';
+                if (item.inputType === 'url') {
+                    inputValDisplay.innerHTML = `<a href="${item.inputValue}" target="_blank" rel="noopener noreferrer">${item.inputValue}</a>`;
+                } else {
+                    inputValDisplay.textContent = item.inputValue.substring(0,100) + (item.inputValue.length > 100 ? "..." : "");
+                }
+                detailsDiv.appendChild(inputValDisplay);
+
+                const typeP = document.createElement('p');
+                typeP.className = 'text-xs text-gray-500';
+                typeP.textContent = `Loại: ${item.inputType === 'url' ? 'Link URL' : 'Văn bản'}`;
+                detailsDiv.appendChild(typeP);
+
+                const scoreP = document.createElement('p');
+                scoreP.className = 'text-sm text-gray-600 mt-1';
+                scoreP.innerHTML = `Điểm: <span class="score-badge ${item.analysisScore >= 70 ? 'score-real' : item.analysisScore <= 30 ? 'score-fake' : 'score-mid'}">${item.analysisScore}%</span>`;
+                detailsDiv.appendChild(scoreP);
+
+                if (item.userVote) {
+                    const voteP = document.createElement('p');
+                    voteP.className = 'text-sm text-gray-600 mt-1';
+                    let voteText = '';
+                    if (item.userVote === 'real') voteText = '👍 Tin Thật';
+                    else if (item.userVote === 'fake') voteText = '👎 Tin Giả';
+                    else if (item.userVote === 'unsure') voteText = '🤔 Không Chắc';
+                    voteP.textContent = `Bình chọn: ${voteText}`;
+                    detailsDiv.appendChild(voteP);
+                }
+
+                const dateP = document.createElement('p');
+                dateP.className = 'text-xs text-gray-400 mt-1';
+                dateP.textContent = new Date(item.timestamp).toLocaleString('vi-VN');
+                detailsDiv.appendChild(dateP);
+
+                div.appendChild(detailsDiv);
+
+                const viewBtn = document.createElement('button');
+                viewBtn.textContent = 'Xem lại';
+                viewBtn.className = 'btn btn-secondary btn-sm mt-2 sm:mt-0 flex-shrink-0 view-history-btn'; // Thêm lớp để ủy quyền
+                viewBtn.setAttribute('data-id', item.id); // Thêm data-id để ủy quyền
+                div.appendChild(viewBtn);
+
+                DOM.historyList.appendChild(div);
+            });
+        }
+
+        // --- Thao tác với Local Storage ---
+        function getHistoryItems() {
+            try {
+                const historyJson = localStorage.getItem(LOCAL_STORAGE_KEY);
+                return historyJson ? JSON.parse(historyJson) : [];
+            } catch (e) {
+                console.error("Lỗi khi parse lịch sử từ Local Storage:", e);
+                return [];
+            }
+        }
+
+        function saveHistoryItem(item) {
+            const items = getHistoryItems();
+            item.id = Date.now().toString(); // ID duy nhất cho mỗi mục
+            items.push(item);
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
+            renderHistory(items); // Hiển thị lại lịch sử sau khi lưu
+        }
+
+        function updateHistoryItem(updatedItem) {
+            let items = getHistoryItems();
+            const index = items.findIndex(item => item.id === updatedItem.id);
+            if (index !== -1) {
+                items[index] = updatedItem;
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(items));
+                renderHistory(items); // Hiển thị lại lịch sử sau khi cập nhật
+            }
+        }
+
+        function loadHistory() {
+            const items = getHistoryItems();
+            renderHistory(items);
+        }
+
+        // --- Xử lý sự kiện ---
+        async function handleSubmit() {
+            let inputValue = '';
+            let isValid = true;
+
+            DOM.urlInputError.textContent = "";
+            DOM.textInputError.textContent = "";
+
+            if (currentInputType === 'url') {
+                inputValue = DOM.urlInput.value.trim();
+                if (!inputValue) {
+                    DOM.urlInputError.textContent = "Vui lòng nhập URL.";
+                    isValid = false;
+                } else {
+                    try {
+                        new URL(inputValue); // Xác thực định dạng URL
+                    } catch (_) {
+                        DOM.urlInputError.textContent = "URL không hợp lệ. (ví dụ: https://example.com)";
+                        isValid = false;
+                    }
+                }
+            } else if (currentInputType === 'text') {
+                inputValue = DOM.textInput.value.trim();
+                if (!inputValue) {
+                    DOM.textInputError.textContent = "Vui lòng nhập nội dung văn bản.";
+                    isValid = false;
+                } else if (inputValue.length < 20) {
+                    DOM.textInputError.textContent = "Nội dung văn bản quá ngắn (ít nhất 20 ký tự).";
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) return; // Dừng nếu đầu vào không hợp lệ
+
+            // Hiển thị chỉ báo tải và ẩn kết quả
+            DOM.loadingIndicator.classList.remove('hidden');
+            DOM.resultSection.classList.add('hidden');
+            DOM.voteMessage.textContent = '';
+
+            // Gọi phân tích từ Chutes AI
+            const analysis = await callChutesAIAnalysis(currentInputType, inputValue);
+
+            if (!analysis) {
+                // Thông báo lỗi đã được hiển thị bởi callChutesAIAnalysis
+                DOM.loadingIndicator.classList.add('hidden');
+                return;
+            }
+
+            const newItem = {
+                inputType: currentInputType,
+                inputValue: inputValue,
+                analysisScore: analysis.score,
+                analysisReasons: analysis.reasons,
+                userVote: null,
+                timestamp: Date.now()
+            };
+
+            saveHistoryItem(newItem);
+            displayResults(newItem);
+            scrollToElement(DOM.resultSection); // Cuộn đến kết quả sau khi hiển thị
+
+            // Xóa trường nhập liệu sau khi gửi thành công
+            if (currentInputType === 'url') DOM.urlInput.value = "";
+            else DOM.textInput.value = "";
+        }
+
+        function handleVote(event) {
+            const button = event.target.closest('.vote-btn');
+            if (!button) return; // Đảm bảo nút bình chọn đã được nhấp
+
+            if (!currentCheckedItem) {
+                showMessageModal("Vui lòng kiểm tra một mục trước khi bình chọn.");
+                return;
+            }
+            const vote = button.dataset.vote;
+
+            // Cập nhật mục hiện tại và lưu vào lịch sử
+            currentCheckedItem.userVote = vote;
+            currentCheckedItem.timestamp = Date.now(); // Cập nhật timestamp để đưa lên đầu lịch sử
+            updateHistoryItem(currentCheckedItem);
+
+            // Cập nhật giao diện cho thông báo bình chọn
+            DOM.voteMessage.textContent = `Cảm ơn bạn đã bình chọn: ${vote === 'real' ? 'Tin Thật' : vote === 'fake' ? 'Tin Giả' : 'Không Chắc'}!`;
+            // Cập nhật giao diện cho các nút bình chọn
+            DOM.voteButtons.forEach(btn => {
+                btn.classList.remove('btn-primary', 'bg-green-500', 'bg-red-500', 'bg-yellow-500');
+                btn.classList.add('btn-secondary');
+                if (btn.dataset.vote === vote) {
+                    btn.classList.remove('btn-secondary');
+                    btn.classList.add('btn-primary');
+                    if (vote === 'real') btn.classList.add('bg-green-500');
+                    else if (vote === 'fake') btn.classList.add('bg-red-500');
+                    else if (vote === 'unsure') btn.classList.add('bg-yellow-500');
+                }
+            });
+        }
+
+        function handleHistoryItemClick(event) {
+            const viewButton = event.target.closest('.view-history-btn');
+            if (!viewButton) return;
+
+            const itemId = viewButton.dataset.id;
+            const items = getHistoryItems();
+            const itemToDisplay = items.find(item => item.id === itemId);
+
+            if (itemToDisplay) {
+                displayResults(itemToDisplay);
+                scrollToElement(DOM.resultSection);
+            }
+        }
+
+        function toggleMobileMenu() {
+            DOM.mobileMenu.classList.toggle('hidden');
+        }
+
+        // --- Khởi tạo các trình nghe sự kiện ---
+        function initEventListeners() {
+            DOM.tabUrlBtn.addEventListener('click', () => switchTab('url'));
+            DOM.tabTextBtn.addEventListener('click', () => switchTab('text'));
+            DOM.submitBtn.addEventListener('click', () => debounce(handleSubmit, 300)); // Debounce submit
+
+            DOM.modalCloseBtn.addEventListener('click', () => DOM.messageModal.classList.remove('active'));
+
+            DOM.votingSection.addEventListener('click', handleVote); // Ủy quyền sự kiện cho các nút bình chọn
+            DOM.historyList.addEventListener('click', handleHistoryItemClick); // Ủy quyền sự kiện cho các nút lịch sử
+
+            DOM.mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        }
+
+        // --- Thiết lập ban đầu ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initEventListeners();
+            switchTab('url'); // Đặt tab ban đầu
+            loadHistory();    // Tải lịch sử khi trang tải
+        });
+    </script>
+</body>
+</html>

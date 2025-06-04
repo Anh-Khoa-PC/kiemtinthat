@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Tin Tức Giả - Kiểm Tin Thật</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style/styles.css">
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    </head>
+<body class="bg-gray-100 font-sans text-gray-800">
+    <header class="bg-white shadow-xl py-5 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-6 lg:px-8">
+            <a href="index.html" class="text-3xl font-extrabold text-blue-700 tracking-tight">Kiểm Tin Thật</a>
+            <div class=" md:flex space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Trang chủ</a>
+                <a href="check-news.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Kiểm tra tin giả</a>
+                <a href="reports.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Báo Cáo</a>
+                <a href="about-us.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Về chúng tôi</a>
+                <a href="contribute.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Đóng góp / Ủng hộ</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition duration-200">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white mt-3 py-3 shadow-lg rounded-xl mx-4">
+            <a href="index.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Trang chủ</a>
+            <a href="check-news.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Kiểm tra tin giả</a>
+            <a href="chatbot-ai.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Chatbot AI</a>
+            <a href="about-us.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Về chúng tôi</a>
+            <a href="contribute.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Đóng góp / Ủng hộ</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 lg:px-8 py-8">
+        <section class="bg-white p-6 md:p-10 rounded-lg shadow-xl max-w-3xl mx-auto my-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-center text-blue-700 mb-6">Báo Cáo Tin Tức Giả</h1>
+            <p class="text-center text-gray-600 mb-8 leading-relaxed">
+                Hãy giúp chúng tôi xác định và cảnh báo về các tin tức có dấu hiệu giả mạo, sai sự thật.
+                Thông tin bạn cung cấp sẽ được bảo mật.
+            </p>
+
+            <form name="fake-news-report" method="POST" data-netlify="true" enctype="multipart/form-data" class="space-y-6" netlify>
+                <div>
+                    <label for="reporterEmail" class="block text-sm font-medium text-gray-700 mb-2">Email của bạn (bắt buộc):</label>
+                    <input type="email" id="reporterEmail" name="reporterEmail" placeholder="vd: ban@email.com" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base">
+                    <p class="mt-2 text-sm text-gray-500">Chúng tôi có thể liên hệ bạn để xác minh thêm nếu cần.</p>
+                </div>
+
+                <div>
+                    <label for="newsLink" class="block text-sm font-medium text-gray-700 mb-2">Link liên quan đến tin tức giả (bắt buộc):</label>
+                    <input type="url" id="newsLink" name="newsLink" placeholder="Ví dụ: https://example.com/bai-viet-gia-mao" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base">
+                    <p class="mt-2 text-sm text-gray-500">Đường dẫn đầy đủ đến bài viết, trang tin, hoặc bài đăng mạng xã hội chứa tin tức giả.</p>
+                </div>
+
+                <div>
+                    <label for="newsTitle" class="block text-sm font-medium text-gray-700 mb-2">Tiêu đề tin tức (tùy chọn):</label>
+                    <input type="text" id="newsTitle" name="newsTitle" placeholder="Ví dụ: 'Tin động trời: Người ngoài hành tinh đổ bộ Trái Đất'"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base">
+                    <p class="mt-2 text-sm text-gray-500">Tiêu đề của tin tức giả bạn muốn báo cáo.</p>
+                </div>
+
+                <div>
+                    <label for="newsSource" class="block text-sm font-medium text-gray-700 mb-2">Nguồn tin (tùy chọn):</label>
+                    <input type="text" id="newsSource" name="newsSource" placeholder="Ví dụ: Báo X, Trang Y, Fanpage Z, TikToker A"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base">
+                    <p class="mt-2 text-sm text-gray-500">Tên trang web, fanpage, hoặc tài khoản mạng xã hội đã đăng tải tin tức này.</p>
+                </div>
+
+                <div>
+                    <label for="detailedReason" class="block text-sm font-medium text-gray-700 mb-2">Mô tả chi tiết tại sao đây là tin tức giả (bắt buộc):</label>
+                    <textarea id="detailedReason" name="detailedReason" rows="6" placeholder="Giải thích chi tiết lý do bạn cho rằng đây là tin tức giả. Nêu rõ các thông tin không chính xác, mâu thuẫn, hoặc dấu hiệu của sự giả mạo." required
+                              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-base resize-y"></textarea>
+                    <p class="mt-2 text-sm text-gray-500">Cung cấp càng chi tiết càng tốt để chúng tôi có thể xác minh.</p>
+                </div>
+
+                <div>
+                    <label for="evidenceFiles" class="block text-sm font-medium text-gray-700 mb-2">Bằng chứng/Ảnh chụp màn hình (tùy chọn):</label>
+                    <input type="file" id="evidenceFiles" name="evidenceFiles[]" multiple accept="image/*,video/*,.pdf"
+                           class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                    <p class="mt-2 text-sm text-gray-500">Tải lên ảnh chụp màn hình, video (tối đa 2 file), hoặc tài liệu liên quan đến tin tức giả. Kích thước tối đa 5MB/file.</p>
+                </div>
+                
+                <div class="flex items-center mb-6">
+                    <input id="agreeTerms" name="agreeTerms" type="checkbox" required
+                           class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="agreeTerms" class="ml-2 block text-sm text-gray-900">
+                        Tôi đã đọc và đồng ý với <a href="report-policies.html" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">Chính sách Báo cáo Tin tức Giả</a> của Kiểm Tin Thật.
+                    </label>
+                </div>
+
+                <div>
+                    <button type="submit"
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+                        Gửi Báo Cáo
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-10 mt-auto">
+        <div class="container mx-auto text-center px-4">
+            <p class="text-lg mb-4">&copy; 2025 Kiểm Tin Thật. Phát triển bởi Nguyễn Võ Anh Khoa</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="https://www.facebook.com/anhkhoavnk/?locale=vi_VN" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-400 transition duration-300 text-xl"><i class="fab fa-facebook-f"></i> Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>
