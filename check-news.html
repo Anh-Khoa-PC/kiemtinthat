@@ -300,11 +300,27 @@
 
         // API Token của bạn từ dịch vụ Chutes AI.
         // Bạn cần đăng ký tài khoản tại Chutes AI và lấy token này.
-        // TUYỆT ĐỐI KHÔNG ĐẶT API KEY CỦA DEEPSEEK TRỰC TIẾP VÀO ĐÂY!
-        // Đây là token để xác thực với Chutes AI, không phải key của DeepSeek.
-        // Token này sẽ được Netlify inject vào trong quá trình build.
+        //
+        // QUAN TRỌNG:
+        // Khi bạn triển khai lên Netlify, biến này sẽ được thay thế bởi giá trị
+        // bạn đã cấu hình trong Environment Variables của Netlify.
+        // Đảm bảo bạn đã thêm biến môi trường với KEY là CHUTES_AI_API_TOKEN
+        // và VALUE là API Token thực tế của bạn trên Netlify.
+        //
+        // Ví dụ về cấu hình trên Netlify:
+        // Key: CHUTES_AI_API_TOKEN
+        // Value: sk-your-chutes-ai-token-1234567890abcdef (Đây là token thật của bạn)
+        //
+        // Trong mã nguồn này, chúng ta sử dụng placeholder '__CHUTES_AI_API_TOKEN__'.
+        // Lệnh build trên Netlify (ví dụ: sed -i 's|__CHUTES_AI_API_TOKEN__|'${CHUTES_AI_API_TOKEN}'|g' check-news.html)
+        // sẽ thay thế placeholder này bằng giá trị thực tế trong quá trình triển khai.
+        //
         const CHUTES_AI_API_TOKEN = "__CHUTES_AI_API_TOKEN__"; 
-        // Ví dụ: const CHUTES_AI_API_TOKEN = "sk-your-chutes-ai-token-1234567890abcdef";
+
+        // Ghi log giá trị của token khi script tải để kiểm tra trực tiếp trong console của trình duyệt.
+        // Nếu bạn thấy một chuỗi dài (token thật), nghĩa là Netlify đã thay thế thành công.
+        // Nếu bạn vẫn thấy '__CHUTES_AI_API_TOKEN__', nghĩa là có vấn đề với quá trình build/thay thế trên Netlify.
+        console.log("CHUTES_AI_API_TOKEN loaded:", CHUTES_AI_API_TOKEN.substring(0, 5) + "..." + CHUTES_AI_API_TOKEN.substring(CHUTES_AI_API_TOKEN.length - 5));
 
 
         const DOM = {
@@ -413,9 +429,7 @@ Nội dung cần phân tích: ${inputValue}
   ]
 }
 \`\`\``;
-
-            // Kiểm tra xem API Token của Chutes AI đã được cung cấp chưa
-            if (!CHUTES_AI_API_TOKEN || CHUTES_AI_API_TOKEN === "__CHUTES_AI_API_TOKEN__") {
+            if (!CHUTES_API_TOKEN || CHUTES_API_TOKEN === "__CHUTES_API_TOKEN__") {
                 showMessageModal("Lỗi: API Token của Chutes AI chưa được cung cấp. Vui lòng cấu hình biến môi trường 'CHUTES_AI_API_TOKEN' trên Netlify.");
                 return null;
             }
@@ -425,14 +439,14 @@ Nội dung cần phân tích: ${inputValue}
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${CHUTES_AI_API_TOKEN}` // Gửi token của Chutes AI
+                        'Authorization': `Bearer ${CHUTES_AI_API_TOKEN}` 
                     },
                     body: JSON.stringify({
-                        // Model DeepSeek V3 0324 như trong hình ảnh bạn cung cấp
+                        
                         model: "deepseek-ai/deepseek-v3-0324",
                         messages: [{ role: "user", content: promptContent }],
-                        stream: false, // Không sử dụng chế độ streaming
-                        max_tokens: 1024 // Giới hạn token đầu ra
+                        stream: false, 
+                        max_tokens: 1024 
                     })
                 });
 
