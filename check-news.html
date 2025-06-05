@@ -811,8 +811,29 @@
                     // Define keyword sets
                     const keywordsHighlyFake = ['tin giả', 'nghe nói', 'sốc', 'vỡ lở', 'chấn động', 'độc quyền và không thể kiểm chứng', 'thuyết âm mưu', 'khủng khiếp', 'chết chóc', 'bí mật chưa từng tiết lộ'];
                     const keywordsModeratelyFake = ['tin đồn', 'chưa xác minh', 'khả năng', 'nghi vấn', 'theo một số nguồn tin', 'không chính thức', 'chưa được công bố', 'rò rỉ thông tin'];
-                    const keywordsTrustworthy = ['bộ y tế', 'chính phủ', 'chính thức', 'theo công bố', 'nghiên cứu khoa học', 'báo cáo từ', 'thông cáo báo chí', 'được xác nhận bởi', 'tổ chức uy tín'];
-                    const keywordsNeutral = ['nhân vật', 'sự kiện', 'phát biểu', 'tình hình', 'kinh tế', 'xã hội', 'việt nam']; // Generic words, added 'viet nam'
+                    const keywordsTrustworthy = [
+                        // Các từ khóa cơ bản và đã thêm ở lần trước
+                        'bộ y tế', 'chính phủ', 'chính thức', 'theo công bố', 'nghiên cứu khoa học',
+                        'báo cáo từ', 'thông cáo báo chí', 'được xác nhận bởi', 'tổ chức uy tín',
+                        'thủ tướng', 'hội nghị', 'liên hợp quốc', 'cam kết', 'biến đổi khí hậu',
+                        'phát biểu', 'đánh giá cao', 'chuyển đổi mô hình', 'tăng trưởng xanh',
+                        'năng lượng tái tạo', 'giảm phát thải', 'đầu tư quốc tế', 'hợp tác công nghệ',
+                        'tổ chức quốc tế', 'đại diện', 'hiện thực hóa', 'khung pháp lý', 'unfccc',
+                        'chính sách',
+
+                        // Các từ khóa đã thêm lần gần nhất
+                        'bộ tài chính', 'bộ ngoại giao', 'bộ công an', 'bộ giáo dục', 'bộ giao thông vận tải',
+                        'ngân hàng nhà nước', 'quốc hội', 'ủy ban', 'hội đồng', 'nghị quyết', 'thông tư', 'quyết định',
+                        'đề án', 'dự thảo', 'luật', 'nghị định', 'ban hành', 'triển khai', 'công bố',
+                        'phân tích chuyên sâu', 'số liệu thống kê', 'từ chuyên gia', 'nghiên cứu mới nhất',
+                        'đơn vị chức năng', 'cơ quan quản lý', 'chuyên gia kinh tế', 'chuyên gia y tế',
+                        'viện nghiên cứu', 'trường đại học', 'báo cáo thường niên', 'kế hoạch phát triển',
+                        'hợp tác quốc tế', 'đối tác chiến lược', 'diễn đàn', 'hội thảo khoa học',
+                        'thông tin chính xác', 'xác thực nguồn tin', 'minh bạch thông tin',
+                        'tuân thủ pháp luật', 'quy trình kiểm định', 'chỉ số kinh tế', 'tổng cục thống kê',
+                        'cục', 'sở', 'đoàn đại biểu', 'ký kết', 'thỏa thuận', 'đàm phán', 'diễn ra tại'
+                    ];
+                    const keywordsNeutral = ['nhân vật', 'sự kiện', 'phát biểu', 'tình hình', 'kinh tế', 'xã hội', 'việt nam', 'con người', 'công ty', 'doanh nghiệp', 'thị trường', 'sản phẩm', 'dịch vụ', 'khách hàng', 'phát triển'];
 
                     // --- Logic for varying scores ---
 
@@ -825,7 +846,9 @@
                             'Thông tin có thể đã bị bác bỏ hoặc không có bằng chứng xác thực.',
                             'Thiếu các chi tiết cụ thể hoặc thông tin kiểm chứng.'
                         ];
-                        } 
+                        // Thay đổi tại đây: relatedChecks = [];
+                        relatedChecks = []; // Bỏ phần này
+                    }
                     // 2. Then check for moderately fake indicators
                     else if (containsAny(lowerContent, keywordsModeratelyFake)) {
                         score = Math.floor(Math.random() * 30) + 30; // 30-59%
@@ -835,16 +858,22 @@
                             'Cần tìm kiếm các nguồn tin uy tín khác để đối chiếu.',
                             'Nguồn tin không phải là nguồn chính thống hoặc ít được biết đến.'
                         ];
-                        relatedChecks = [
-                            {
-                                title: 'Nghi vấn về dự án phát triển mới',
-                                date: `15/04/${currentYear}`,
-                                rating: 'Chưa kiểm chứng',
-                                url: 'https://example.com/project-rumors'
-                            }
+                        // Thay đổi tại đây: relatedChecks = [];
+                        relatedChecks = []; // Bỏ phần này
+                    }
+                    // 3. Then check for trustworthy indicators
+                    else if (containsAny(lowerContent, keywordsTrustworthy)) {
+                        score = Math.floor(Math.random() * 15) + 80; // Dải điểm 80-94%
+                        reasons = [
+                            'Nguồn tin uy tín, có kiểm chứng hoặc được chính quyền công bố.',
+                            'Thông tin được trình bày khách quan, có số liệu và bằng chứng rõ ràng.',
+                            'Không có dấu hiệu của ngôn ngữ giật gân hoặc gây hoang mang.',
+                            'Trích dẫn nguồn cụ thể và đáng tin cậy.',
+                            'Nội dung đề cập các sự kiện và nhân vật chính thống, có tính thời sự.'
                         ];
-                    } 
-                
+                        // Thay đổi tại đây: relatedChecks = [];
+                        relatedChecks = []; // Bỏ phần này
+                    }
                     // 4. Fallback for neutral or unclear content
                     else if (containsAny(lowerContent, keywordsNeutral) || content.length < 50) {
                         score = Math.floor(Math.random() * 20) + 50; // 50-69%
@@ -853,20 +882,22 @@
                             'Có thể là thông tin chung chung hoặc không đủ chi tiết để đánh giá toàn diện.',
                             'Độ dài văn bản ngắn có thể không cung cấp đủ ngữ cảnh.'
                         ];
+                        // Thay đổi tại đây: relatedChecks = [];
                         relatedChecks = [];
                     }
-                    // 5. Default high score if no strong indicators
+                    // 5. Default high score if no strong indicators (should be less likely to hit this with better keyword sets)
                     else {
-                        score = Math.floor(Math.random() * 10) + 85; // 85-94%
+                        score = Math.floor(Math.random() * 10) + 70; // 70-79%
                         reasons = [
                             'Nội dung có vẻ hợp lý và không chứa các yếu tố cảnh báo về tin giả.',
                             'Cấu trúc câu rõ ràng, không giật gân.'
                         ];
-                        relatedChecks = []; 
+                        // Thay đổi tại đây: relatedChecks = [];
+                        relatedChecks = [];
                     }
-                    
+
                     // Add a slight random variance to the score
-                    score = Math.max(10, Math.min(95, score + Math.floor(Math.random() * 10) - 5)); // Keep score between 10-95
+                    score = Math.max(10, Math.min(95, score + Math.floor(Math.random() * 5) - 2)); // Giảm biên độ ngẫu nhiên một chút
 
                     resolve({
                         type: type,
@@ -874,7 +905,7 @@
                         analysis: {
                             score: score,
                             reasons: reasons,
-                            relatedChecks: relatedChecks
+                            relatedChecks: relatedChecks // Biến này sẽ luôn là mảng rỗng []
                         }
                     });
                 }, 2000); // Simulate network delay
