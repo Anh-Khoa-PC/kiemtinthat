@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hướng dẫn chi tiết cách tự kiểm tra tin giả và xác minh thông tin một cách hiệu quả.">
+    <title>Hướng Dẫn Kiểm Tra Tin Tức - KiểmTinThật</title>
+
+    <meta name="keywords" content="hướng dẫn kiểm tra tin giả, xác minh thông tin, kỹ năng fact-checking, nhận biết tin giả">
+    <meta property="og:title" content="Hướng Dẫn Kiểm Tra Tin Tức - KiểmTinThật">
+    <meta property="og:description" content="Các bước đơn giản và hiệu quả giúp bạn tự xác minh tin tức và thông tin trực tuyến.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --danger-color: #dc2626;
+            --warning-color: #d97706;
+            --success-color: #059669;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            line-height: 1.6;
+            color: #334155;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #1a202c; /* gray-900 */
+        }
+
+        .guide-step {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .guide-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.06);
+        }
+
+        .guide-step h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700; /* font-bold */
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .guide-step p {
+            margin-bottom: 1rem;
+            color: #475569; /* gray-700 */
+        }
+
+        .guide-tip {
+            background-color: #e0f2fe; /* blue-100 */
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .guide-tip p {
+            color: #1e3a8a; /* blue-800 */
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            color: #4b5563; /* gray-600 */
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background-color: #e2e8f0; /* gray-200 */
+            color: #1f2937; /* gray-900 */
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .nav-link.active:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.25rem;
+                margin: 1rem auto;
+                border-radius: 12px;
+            }
+            .section-header h2 {
+                font-size: 1.75rem; /* text-3xl */
+            }
+            .guide-step h3 {
+                font-size: 1.25rem; /* text-xl */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="py-5 sticky top-0 z-50">
+        <nav class="container mx-auto flex justify-between items-center px-6 lg:px-8">
+            <a href="index.html" class="text-3xl font-extrabold text-blue-700 tracking-tight">Kiểm Tin Thật</a>
+            <div class=" md:flex space-x-8">
+                <a href="index.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Trang chủ</a>
+                <a href="check-news.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Kiểm tra tin giả</a>
+                <a href="reports.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Báo Cáo</a>
+                <a href="fact-checking-guide.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Kiến Thức</a>
+                <a href="about-us.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Về chúng tôi</a>
+                <a href="contribute.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Đóng góp / Ủng hộ</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 focus:outline-none p-2 rounded-md hover:bg-gray-100 transition duration-200">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white mt-3 py-3 shadow-lg rounded-xl mx-4">
+            <a href="index.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Trang chủ</a>
+            <a href="check-news.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Kiểm tra tin giả</a>
+            <a href="chatbot-ai.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Báo Cáo</a>
+            <a href="fact-checking-guide.html" class="text-gray-700 hover:text-blue-600 font-semibold text-lg transition duration-300 ease-in-out transform hover:scale-105">Kiến Thức</a>
+            <a href="about-us.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Về chúng tôi</a>
+            <a href="contribute.html" class="block px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition duration-200 text-lg font-medium">Đóng góp / Ủng hộ</a>
+        </div>
+    </header>
+
+    <main class="py-8">
+        <div class="container mx-auto px-4">
+            <section class="mb-12">
+                <div class="section-header">
+                    <i class="fas fa-question-circle text-blue-600 text-4xl"></i>
+                    <h1 class="text-gray-900">Hướng Dẫn Kiểm Tra Tin Tức</h1>
+                </div>
+                <p class="text-lg text-gray-700 mb-6">
+                    Trong thời đại thông tin bùng nổ, việc nhận diện tin giả (fake news) và xác minh thông tin là kỹ năng thiết yếu.
+                    Dưới đây là các bước đơn giản nhưng hiệu quả giúp bạn trở thành người đọc thông thái.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 text-blue-800 rounded-lg">
+                    <p class="font-semibold flex items-center mb-2"><i class="fas fa-lightbulb mr-2"></i> Tại sao phải kiểm tra?</p>
+                    <ul class="list-disc list-inside text-sm">
+                        <li>Bảo vệ bản thân khỏi thông tin sai lệch.</li>
+                        <li>Đóng góp vào một môi trường thông tin lành mạnh.</li>
+                        <li>Tránh bị thao túng hoặc lừa đảo.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="space-y-8">
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">1.</span> <i class="fas fa-bullhorn text-blue-600"></i> Đừng chỉ đọc tiêu đề</h3>
+                    <p>Tiêu đề thường được viết để gây sốc hoặc thu hút sự chú ý. Đừng vội tin ngay vào tiêu đề mà hãy đọc toàn bộ nội dung bài viết. Kiểm tra xem tiêu đề có khớp với nội dung không.</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> **Mẹo:** Tin giả thường có tiêu đề giật gân, sử dụng chữ in hoa hoặc nhiều dấu chấm than.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">2.</span> <i class="fas fa-user-shield text-blue-600"></i> Kiểm tra nguồn tin</h3>
+                    <p>Ai là tác giả? Trang web này là của ai? Các nguồn tin uy tín thường là các tổ chức báo chí lớn, cơ quan chính phủ, hoặc các tổ chức học thuật. Kiểm tra địa chỉ URL: tin giả có thể sử dụng tên miền gần giống các trang uy tín (ví dụ: `vietnamnet.co` thay vì `vietnamnet.vn`).</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> Mẹo: Tìm trang "Về chúng tôi" hoặc "Liên hệ" trên website để xem thông tin về tác giả và tổ chức. Cảnh giác với các trang web mới, không có lịch sử hoạt động.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">3.</span> <i class="fas fa-clock text-blue-600"></i> Kiểm tra ngày tháng</h3>
+                    <p>Tin tức cũ có thể được đăng lại để gây nhầm lẫn hoặc tạo ấn tượng sai lệch. Luôn kiểm tra ngày xuất bản của bài viết. Thông tin đã lỗi thời có thể không còn đúng trong bối cảnh hiện tại.</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> Mẹo: Xem ngày bài viết được cập nhật lần cuối. Đôi khi, tin giả chỉ thay đổi ngày để trông có vẻ mới.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">4.</span> <i class="fas fa-images text-blue-600"></i> Xem xét hình ảnh và video</h3>
+                    <p>Hình ảnh và video có thể bị chỉnh sửa, cắt ghép, hoặc sử dụng sai ngữ cảnh. Sử dụng công cụ tìm kiếm hình ảnh ngược (ví dụ: Google Images, TinEye) để kiểm tra nguồn gốc và thời điểm hình ảnh/video xuất hiện lần đầu.</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> Mẹo: Chú ý các chi tiết bất thường trong ảnh (bóng, ánh sáng, độ phân giải). Video có thể bị cắt để làm sai lệch ý nghĩa.</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">5.</span> <i class="fas fa-quote-right text-blue-600"></i> Kiểm tra bằng chứng và trích dẫn</h3>
+                    <p>Bài viết có đưa ra số liệu, thống kê, hoặc trích dẫn các chuyên gia không? Hãy tìm kiếm các nguồn gốc của những bằng chứng đó. Nếu có trích dẫn, hãy tìm xem lời trích dẫn đó có đúng là của người đó và trong ngữ cảnh đó không.</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> Mẹo: Tin giả thường không có bằng chứng cụ thể hoặc trích dẫn các "chuyên gia" ẩn danh, hoặc nguồn "không thể công bố".</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">6.</span> <i class="fas fa-globe text-blue-600"></i> Đối chiếu với các nguồn khác</h3>
+                    <p>Nếu một thông tin quan trọng, các hãng tin tức lớn và uy tín khác cũng sẽ đưa tin. Tìm kiếm thông tin tương tự từ nhiều nguồn khác nhau để xem chúng có khớp nhau không. Nếu chỉ có một nguồn duy nhất đưa tin và nguồn đó không đáng tin cậy, hãy cảnh giác.</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> Mẹo: Sử dụng các công cụ tìm kiếm hoặc các trang web kiểm chứng tin tức uy tín (fact-checking websites).</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">7.</span> <i class="fas fa-grin-beam-sweat text-blue-600"></i> Phân biệt ý kiến và sự thật</h3>
+                    <p>Nhiều bài viết là ý kiến cá nhân hoặc phân tích, không phải là thông tin thực tế đã được kiểm chứng. Hãy phân biệt rõ giữa ý kiến (dù có thể là của chuyên gia) và sự thật (dữ liệu, sự kiện đã xảy ra).</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i>Mẹo: Các bài báo ý kiến thường có các từ như "Tôi nghĩ...", "Theo quan điểm của tôi...", "Có lẽ...", hoặc được đăng trong mục "Bình luận", "Quan điểm".</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <h3><span class="text-blue-600">8.</span> <i class="fas fa-filter text-blue-600"></i> Đánh giá thành kiến cá nhân</h3>
+                    <p>Chúng ta có xu hướng tin vào những thông tin phù hợp với niềm tin sẵn có của mình. Hãy tự hỏi liệu bạn có đang tin vào thông tin này chỉ vì nó "đúng ý" bạn không, và cố gắng đánh giá khách quan nhất có thể.</p>
+                    <div class="guide-tip">
+                        <p><i class="fas fa-bookmark mr-2"></i> Mẹo: Đọc nhiều quan điểm khác nhau, ngay cả những quan điểm mà bạn không đồng tình, để có cái nhìn đa chiều.</p>
+                    </div>
+                </div>
+            </section>
+
+           
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-10 mt-auto">
+        <div class="bg-gray-900 container mx-auto text-center px-4">
+            <p class="text-lg mb-4">&copy; 2025 Kiểm Tin Thật. Phát triển bởi Nguyễn Võ Anh Khoa </p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="https://www.facebook.com/anhkhoavnk/?locale=vi_VN" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-400 transition duration-300 text-xl"><i class="fab fa-facebook-f "></i> Facebook</a>
+               
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
