@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import existing styles from the project */
+@import url('../style/styles.css');
+
+/* CSS Variables for theming */
+:root {
+  --primary-color: #2ecc71;
+  --secondary-color: #3f51b5;
+  --text-dark: #333;
+  --text-light: #78909c;
+  --border-color: #e0e0e0;
+  --shadow-medium: 0 8px 30px rgba(0,0,0,0.08);
+  --background-light: #f0f2f5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
